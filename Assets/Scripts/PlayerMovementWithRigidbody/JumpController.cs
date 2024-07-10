@@ -1,23 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpController : MonoBehaviour
+/// <summary>
+/// Класс отвечающий за управление прыжками игрока
+/// </summary>
+public class JumpController
 {
-    public float jumpForce = 5f;
+    private readonly Rigidbody2D _playerRigidbody;
+    private readonly float _jumpForce;
 
-    private Rigidbody rb;
-
-    void Start()
+    public JumpController(Rigidbody2D playerRigidbody, float jumpForce)
     {
-        rb = GetComponent<Rigidbody>();
+        _playerRigidbody = playerRigidbody;
+        _jumpForce = jumpForce;
     }
 
+    /// <summary>
+    /// обработка ввода прыжка и выполнение прыжка
+    /// </summary>
+    /// <param name="jumpWasPressed"></param>
     public void HandleJump(bool jumpWasPressed)
     {
-        if (jumpWasPressed && Mathf.Abs(rb.velocity.y) < 0.1f)
+        if (jumpWasPressed && Mathf.Abs(_playerRigidbody.velocity.y) < 0.1f)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            _playerRigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
         }
     }
 }

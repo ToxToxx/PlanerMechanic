@@ -1,46 +1,58 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GlideController : MonoBehaviour
+/// <summary>
+/// Класс отвечающий за планирование игрока
+/// </summary>
+public class GlideController
 {
-    public float glideGravityScale = 0.5f;
-    public float normalGravityScale = 1.0f;
-    public float glideControl = 2.0f;
+    private readonly Rigidbody2D _playerRigidbody;
 
-    private Rigidbody rb;
-    private bool isGliding = false;
-    private float initialDrag;
+    private readonly float _glideGravityScale;
+    private readonly float _glideControl;
+    private readonly float _initialDrag;
 
-    void Start()
+    private bool _isGliding = false;
+    public GlideController(Rigidbody2D playerRigidbody, float glideGravityScale, float glideControl)
     {
-        rb = GetComponent<Rigidbody>();
-        initialDrag = rb.drag;
+        _playerRigidbody = playerRigidbody;
+        _glideGravityScale = glideGravityScale;
+        _glideControl = glideControl;
+        _initialDrag = _playerRigidbody.drag;
     }
 
+    /// <summary>
+    /// метод отвечающий за управление ввода планирования, когда мы удерживаем кнопку прыжка
+    /// </summary>
+    /// <param name="jumpIsHeld"></param>
+    /// <param name="jumpWasReleased"></param>
     public void HandleGlide(bool jumpIsHeld, bool jumpWasReleased)
     {
-        if (jumpIsHeld && rb.velocity.y < 0)
+        if (jumpIsHeld && _playerRigidbody.velocity.y < 0)
         {
-            isGliding = true;
+            _isGliding = true;
         }
 
-        if (jumpWasReleased || rb.velocity.y >= 0)
+        if (jumpWasReleased || _playerRigidbody.velocity.y >= 0)
         {
-            isGliding = false;
+            _isGliding = false;
         }
+
+        _playerRigidbody.gravityScale = _isGliding ? _glideGravityScale : 1f;
     }
 
-    void FixedUpdate()
+    /// <summary>
+    /// Сам процесс планирования игрока
+    /// </summary>
+    public void InitiateGliding()
     {
-        if (isGliding)
+        if (_isGliding)
         {
-            rb.velocity = new Vector3(rb.velocity.x, Mathf.Max(rb.velocity.y, -glideControl), rb.velocity.z);
-            rb.drag = glideGravityScale;
+            _playerRigidbody.velocity = new Vector2(_playerRigidbody.velocity.x, Mathf.Max(_playerRigidbody.velocity.y, -_glideControl));
+            _playerRigidbody.drag = _glideGravityScale;
         }
         else
         {
-            rb.drag = initialDrag;
+            _playerRigidbody.drag = _initialDrag;
         }
     }
 }
