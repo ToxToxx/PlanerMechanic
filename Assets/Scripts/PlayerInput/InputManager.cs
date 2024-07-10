@@ -22,7 +22,7 @@ public class InputManager : MonoBehaviour
     private InputAction _jumpAction;
 
 
-    //
+    //Получаем компоненты отвечающие за движение и за прыжок, а также сам инпут
     private void Awake()
     {
         PlayerInput = GetComponent<PlayerInput>();
