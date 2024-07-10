@@ -14,6 +14,8 @@ public class PlayerMovementController : MonoBehaviour
     private GlideController _glideController;
     private Rigidbody2D _playerRigidbody;
 
+    private bool _isFacingRight = true;
+
     private void Awake()
     {
         InitiateComponents(); 
@@ -26,6 +28,7 @@ public class PlayerMovementController : MonoBehaviour
     private void Update()
     {
         HandlePlayerInput();
+        FlipPlayer(InputManager.Movement);
     }
 
     private void FixedUpdate()
@@ -60,5 +63,32 @@ public class PlayerMovementController : MonoBehaviour
 
         // Обработка ввода для планирования
         _glideController.HandleGlide(InputManager.JumpIsHeld, InputManager.JumpWasReleased);
+    }
+
+
+    /// <summary>
+    /// Метод для поворота игрока влево и вправо
+    /// </summary>
+    private void FlipPlayer(Vector2 movement)
+    {
+        if (movement.x > 0 && !_isFacingRight)
+        {
+            Flip();
+        }
+        else if (movement.x < 0 && _isFacingRight)
+        {
+            Flip();
+        }
+    }
+
+    /// <summary>
+    /// Переключение направления игрока
+    /// </summary>
+    private void Flip()
+    {
+        _isFacingRight = !_isFacingRight;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
 }

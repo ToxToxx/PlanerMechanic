@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d87dae03388309f4d98865ee68263c6b, type: 3}
   m_Name: PlayerMovementStats
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpForce: 50
-  glideGravityScale: 0.5
-  glideControl: 2
+  MoveSpeed: 5
+  JumpForce: 50
+  GlideGravityScale: 0.5
+  GlideControl: 2
